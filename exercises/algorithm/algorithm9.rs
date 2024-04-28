@@ -2,7 +2,11 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
+/*
+    heap
+    This question requires you to implement a binary heap function
+*/
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -23,7 +27,7 @@ where
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
             count: 0,
-            items: vec![T::default()],
+            items: Vec::new(),
             comparator,
         }
     }
@@ -37,28 +41,90 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        self.heapify_up(self.count - 1);
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
-        idx / 2
+        if idx == 0 {
+            return 0; // If idx is 0, return 0 to avoid underflow
+        }
+        (idx - 1) / 2
     }
 
     fn children_present(&self, idx: usize) -> bool {
-        self.left_child_idx(idx) <= self.count
+        self.left_child_idx(idx) < self.count
     }
 
     fn left_child_idx(&self, idx: usize) -> usize {
-        idx * 2
+        idx * 2 + 1
     }
 
     fn right_child_idx(&self, idx: usize) -> usize {
-        self.left_child_idx(idx) + 1
+        idx * 2 + 2
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        let left_idx = self.left_child_idx(idx);
+        let right_idx = self.right_child_idx(idx);
+
+        if right_idx < self.count && (self.comparator)(&self.items[right_idx], &self.items[left_idx]) {
+            right_idx
+        } else {
+            left_idx
+        }
+    }
+
+    fn heapify_up(&mut self, mut idx: usize) {
+        let mut parent_idx;
+        while idx > 0 {
+            parent_idx = self.parent_idx(idx);
+            if !(self.comparator)(&self.items[idx], &self.items[parent_idx]) {
+                break;
+            }
+            self.items.swap(idx, parent_idx);
+            idx = parent_idx;
+        }
+    }
+
+    fn heapify_down(&mut self, mut idx: usize) {
+        loop {
+            let smallest_child_idx = self.smallest_child_idx(idx);
+            if smallest_child_idx >= self.count || !(self.comparator)(&self.items[smallest_child_idx], &self.items[idx]) {
+                break;
+            }
+            self.items.swap(idx, smallest_child_idx);
+            idx = smallest_child_idx;
+        }
+    }
+}
+
+impl<T> Iterator for Heap<T>
+where
+    T: Default,
+{
+    type Item = T;
+
+    fn next(&mut self) -> Option<T> {
+        if self.is_empty() {
+            return None;
+        }
+        // Swap root node with the last node
+        self.items.swap(0, self.count - 1);
+        self.count -= 1;
+
+        // Heapify down
+        let mut idx = 0;
+        loop {
+            let smallest_child_idx = self.smallest_child_idx(idx);
+            if smallest_child_idx >= self.count || !(self.comparator)(&self.items[smallest_child_idx], &self.items[idx]) {
+                break;
+            }
+            self.items.swap(idx, smallest_child_idx);
+            idx = smallest_child_idx;
+        }
+        Some(self.items.remove(self.count))
     }
 }
 
@@ -74,18 +140,6 @@ where
     /// Create a new MaxHeap
     pub fn new_max() -> Self {
         Self::new(|a, b| a > b)
-    }
-}
-
-impl<T> Iterator for Heap<T>
-where
-    T: Default,
-{
-    type Item = T;
-
-    fn next(&mut self) -> Option<T> {
-        //TODO
-		None
     }
 }
 
@@ -152,3 +206,5 @@ mod tests {
         assert_eq!(heap.next(), Some(2));
     }
 }
+
+

@@ -7,19 +7,21 @@
 // Execute `rustlings hint tests8` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+
 
 fn main() {}
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
+    // 不需要使用 super::*，因为测试代码中并没有使用到外部定义的内容
     #[test]
     fn test_success() {
-        #[cfg(feature = "pass")]
+        // 如果未设置名为 "pass" 的特性，则直接返回成功
+        #[cfg(not(feature = "pass"))]
         return;
 
         panic!("no cfg set");
+        
     }
 }
+

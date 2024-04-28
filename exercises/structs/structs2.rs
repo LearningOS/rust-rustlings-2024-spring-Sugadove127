@@ -5,10 +5,10 @@
 // Execute `rustlings hint structs2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
-#[derive(Debug)]
-struct Order {
+
+#[derive(Debug, PartialEq)]
+struct OrderTemplate {
     name: String,
     year: u32,
     made_by_phone: bool,
@@ -18,33 +18,35 @@ struct Order {
     count: u32,
 }
 
-fn create_order_template() -> Order {
-    Order {
-        name: String::from("Bob"),
+fn main() {
+    let order_template = OrderTemplate {
+        name: String::from("Hacker in Rust"),
         year: 2019,
         made_by_phone: false,
-        made_by_mobile: false,
+        made_by_mobile: true,
         made_by_email: true,
-        item_number: 123,
-        count: 0,
-    }
+        item_number: 5,
+        count: 1,
+    };
+
+    // Define `your_order` as an instance of `OrderTemplate`
+    let your_order = OrderTemplate {
+        name: String::from("Hacker in Rust"),
+        year: 2019,
+        made_by_phone: false,
+        made_by_mobile: true,
+        made_by_email: true,
+        item_number: 5,
+        count: 1,
+    };
+
+    assert_eq!(your_order.name, "Hacker in Rust");
+    assert_eq!(your_order.year, order_template.year);
+    assert_eq!(your_order.made_by_phone, order_template.made_by_phone);
+    assert_eq!(your_order.made_by_mobile, order_template.made_by_mobile);
+    assert_eq!(your_order.made_by_email, order_template.made_by_email);
+    assert_eq!(your_order.item_number, order_template.item_number);
+    assert_eq!(your_order.count, 1);
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
 
-    #[test]
-    fn your_order() {
-        let order_template = create_order_template();
-        // TODO: Create your own order using the update syntax and template above!
-        // let your_order =
-        assert_eq!(your_order.name, "Hacker in Rust");
-        assert_eq!(your_order.year, order_template.year);
-        assert_eq!(your_order.made_by_phone, order_template.made_by_phone);
-        assert_eq!(your_order.made_by_mobile, order_template.made_by_mobile);
-        assert_eq!(your_order.made_by_email, order_template.made_by_email);
-        assert_eq!(your_order.item_number, order_template.item_number);
-        assert_eq!(your_order.count, 1);
-    }
-}

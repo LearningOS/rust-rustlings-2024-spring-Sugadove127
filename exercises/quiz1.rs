@@ -13,12 +13,26 @@
 //
 // No hints this time ;)
 
-// I AM NOT DONE
+
 
 // Put your function here!
 // fn calculate_price_of_apples {
 
 // Don't modify this function!
+// quiz1.rs
+
+// Define the function to calculate the price of apples
+fn calculate_price_of_apples(quantity: i32) -> i32 {
+    let price_per_apple = if quantity > 40 {
+        1
+    } else {
+        2
+    };
+
+    quantity * price_per_apple
+}
+
+// Don't modify the test function!
 #[test]
 fn verify_test() {
     let price1 = calculate_price_of_apples(35);
@@ -31,3 +45,4 @@ fn verify_test() {
     assert_eq!(41, price3);
     assert_eq!(65, price4);
 }
+

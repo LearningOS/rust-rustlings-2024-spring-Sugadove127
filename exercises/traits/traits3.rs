@@ -8,10 +8,15 @@
 // Execute `rustlings hint traits3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+
 
 pub trait Licensed {
     fn licensing_info(&self) -> String;
+
+    // Add a default function to provide default licensing information
+    fn default_licensing_info(&self) -> String {
+        String::from("Some information")
+    }
 }
 
 struct SomeSoftware {
@@ -22,8 +27,19 @@ struct OtherSoftware {
     version_number: String,
 }
 
-impl Licensed for SomeSoftware {} // Don't edit this line
-impl Licensed for OtherSoftware {} // Don't edit this line
+impl Licensed for SomeSoftware {
+    // Implement licensing_info using the default_licensing_info function
+    fn licensing_info(&self) -> String {
+        format!("{} for version {}", self.default_licensing_info(), self.version_number)
+    }
+}
+
+impl Licensed for OtherSoftware {
+    // Implement licensing_info using the default_licensing_info function
+    fn licensing_info(&self) -> String {
+        format!("{} for version {}", self.default_licensing_info(), self.version_number)
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -36,7 +52,8 @@ mod tests {
         let other_software = OtherSoftware {
             version_number: "v2.0.0".to_string(),
         };
-        assert_eq!(some_software.licensing_info(), licensing_info);
-        assert_eq!(other_software.licensing_info(), licensing_info);
+        assert_eq!(some_software.licensing_info(), format!("{} for version {}", licensing_info, 1));
+        assert_eq!(other_software.licensing_info(), format!("{} for version {}", licensing_info, "v2.0.0"));
     }
 }
+

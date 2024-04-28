@@ -9,29 +9,7 @@
 // Execute `rustlings hint from_str` or use the `hint` watch subcommand for a
 // hint.
 
-use std::num::ParseIntError;
-use std::str::FromStr;
 
-#[derive(Debug, PartialEq)]
-struct Person {
-    name: String,
-    age: usize,
-}
-
-// We will use this error type for the `FromStr` implementation.
-#[derive(Debug, PartialEq)]
-enum ParsePersonError {
-    // Empty input string
-    Empty,
-    // Incorrect number of fields
-    BadLen,
-    // Empty name field
-    NoName,
-    // Wrapped error from parse::<usize>()
-    ParseInt(ParseIntError),
-}
-
-// I AM NOT DONE
 
 // Steps:
 // 1. If the length of the provided string is 0, an error should be returned
@@ -49,9 +27,50 @@ enum ParsePersonError {
 // you want to return a string error message, you can do so via just using
 // return `Err("my error message".into())`.
 
+use std::num::ParseIntError;
+use std::str::FromStr;
+
+#[derive(Debug, PartialEq)]
+struct Person {
+    name: String,
+    age: usize,
+}
+
+#[derive(Debug, PartialEq)]
+enum ParsePersonError {
+    Empty,
+    BadLen,
+    NoName,
+    ParseInt(ParseIntError),
+}
+
 impl FromStr for Person {
     type Err = ParsePersonError;
+    
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.is_empty() {
+            return Err(ParsePersonError::Empty);
+        }
+
+        let parts: Vec<&str> = s.split(',').collect();
+        
+        if parts.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+
+        let name = parts[0].trim();
+        let age_str = parts[1].trim();
+        
+        if name.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+
+        let age = age_str.parse::<usize>().map_err(ParsePersonError::ParseInt)?;
+
+        Ok(Person {
+            name: String::from(name),
+            age,
+        })
     }
 }
 
@@ -131,3 +150,4 @@ mod tests {
         );
     }
 }
+

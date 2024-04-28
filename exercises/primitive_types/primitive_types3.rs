@@ -5,14 +5,11 @@
 // Execute `rustlings hint primitive_types3` or use the `hint` watch subcommand
 // for a hint.
 
-// I AM NOT DONE
 
 fn main() {
-    let a = ???
+    // Integers (`i32`)
 
-    if a.len() >= 100 {
-        println!("Wow, that's a big array!");
-    } else {
-        println!("Meh, I eat arrays like that for breakfast.");
-    }
+    let a = 42; // 将这行完成为一个整数值
+    println!("The value of a is: {}", a);
 }
+

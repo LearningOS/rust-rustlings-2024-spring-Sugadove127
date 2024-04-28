@@ -22,18 +22,23 @@
 // Execute `rustlings hint tests5` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
+
+/// Modify the `u32` value at the given address.
+///
 /// # Safety
 ///
-/// The `address` must contain a mutable reference to a valid `u32` value.
+/// This function is marked as unsafe because it dereferences a raw pointer and modifies
+/// the memory it points to. The caller must ensure that the `address` parameter points to
+/// a valid memory location containing a `u32` value. Additionally, the caller must ensure
+/// that the lifetime of any references obtained from the modified value does not exceed
+/// the lifetime of the original data.
 unsafe fn modify_by_address(address: usize) {
-    // TODO: Fill your safety notice of the code block below to match your
-    // code's behavior and the contract of this function. You may use the
-    // comment of the test below as your format reference.
-    unsafe {
-        todo!("Your code goes here")
-    }
+    // SAFETY: The caller must ensure that the provided address points to a valid
+    // `u32` value. Dereferencing a raw pointer is inherently unsafe, so it's the
+    // responsibility of the caller to ensure that this operation is safe.
+    let ptr = address as *mut u32;
+    *ptr = 0xAABBCCDD;
 }
 
 #[cfg(test)]
@@ -46,6 +51,7 @@ mod tests {
         // SAFETY: The address is guaranteed to be valid and contains
         // a unique reference to a `u32` local variable.
         unsafe { modify_by_address(&mut t as *mut u32 as usize) };
-        assert!(t == 0xAABBCCDD);
+        assert_eq!(t, 0xAABBCCDD);
     }
 }
+
